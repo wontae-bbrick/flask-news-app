@@ -5,6 +5,7 @@ from app.db_connector import db
 class News(db.Model): 
     id = db.Column(db.Integer, primary_key=True)
     category = db.Column(db.String, nullable=False)
+    title = db.Column(db.String, nullable=False)
     platform = db.Column(db.String, nullable=False)
     press = db.Column(db.String, nullable=False)
     datetime = db.Column(db.Integer, nullable=False)

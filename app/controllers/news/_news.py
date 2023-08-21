@@ -7,6 +7,10 @@ news_post_args.add_argument('category',
                             type=str,
                             help="Error: category is required.",
                             required=True)
+news_post_args.add_argument('title',
+                            type=str,
+                            help="Error: title is required.",
+                            required=True)
 news_post_args.add_argument('platform',
                             type=str,
                             help="Error: platform is required.",
@@ -16,7 +20,7 @@ news_post_args.add_argument('press',
                             help="Error: press is required.",
                             required=True)
 news_post_args.add_argument('datetime',
-                            type=int,
+                            type=str,
                             help="Error: datetime is required.",
                             required=True)
 news_post_args.add_argument('url',
@@ -29,10 +33,11 @@ news_post_args.add_argument('deleted',
 
 news_fields = {
     'id': fields.Integer,
+    'title': fields.String,
     'category': fields.String,
     'platform': fields.String,
     'press': fields.String,
-    'datetime': fields.Integer,
+    'datetime': fields.String,
     'url': fields.String,
     'deleted': fields.Boolean
 }
@@ -50,6 +55,7 @@ class NewsListController(Resource):
         args = news_post_args.parse_args()
         news = News(
             category=self.category,
+            title=args['title'],
             platform=args['platform'],
             press=args['press'],
             datetime=args['datetime'],
