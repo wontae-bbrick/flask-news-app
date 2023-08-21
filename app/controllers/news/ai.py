@@ -1,4 +1,7 @@
-from ._news import News, NewsList
+from ._news import NewsController, NewsListController
 
-aiController = News('ai')
-aiListController = NewsList('ai')
+class AiController(NewsController):
+    category = 'ai'
+
+class AiListController(NewsListController):
+    category = 'ai'

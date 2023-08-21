@@ -1,4 +1,7 @@
-from ._news import News, NewsList
+from ._news import NewsController, NewsListController
 
-stoController = News('sto')
-stoListController = NewsList('sto')
+class StoController(NewsController):
+    category = 'sto'
+
+class StoListController(NewsListController):
+    category = 'sto'

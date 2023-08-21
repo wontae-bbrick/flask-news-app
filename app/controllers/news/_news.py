@@ -37,13 +37,12 @@ news_fields = {
     'deleted': fields.Boolean
 }
 
-class NewsList(Resource):
-    def __init__(self, category):
-        self.category = category
+class NewsListController(Resource):
+    category = ''
     
     @marshal_with(news_fields)
     def get(self):
-        result = News.query.filter(News.deleted==False).all()
+        result = News.query.filter(News.category==self.category, News.deleted==False).all()
         return result
 
     @marshal_with(news_fields)
@@ -59,14 +58,16 @@ class NewsList(Resource):
         db.session.add(news)
         db.session.commit()
         return news
+    
+# 이걸 상속을 해줘야한다
 
-class News(Resource):
-    def __init__(self, category):
-        self.category = category
-
+class NewsController(Resource):
+    category = ''
     @marshal_with(news_fields)
     def get(self, id):
         result = News.query.filter(News.category==self.category, News.id==id).first()
+        if not result:
+            abort(404, message=f"{self.category} with id: {id} does not exist.")
         if result.deleted:
             abort(404, message=f"{self.category} with id: {id} is already deleted.")
         return result
