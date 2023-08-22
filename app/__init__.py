@@ -6,14 +6,19 @@ from app.db_connector import db
 from app.controllers.news.ai import AiController, AiListController
 from app.controllers.news.sto import StoController, StoListController
 from config import Config
-from app.crawlers.naver import run as naver_run
+
+from app.crawlers.naver import *
+from app.crawlers.daum import *
+
 
 def crawl():
-    naver_run('ai')
-    naver_run('sto')
+    naverNewsAi.run()
+    naverNewsSto.run()
+    daumNewsAi.run()
+    daumNewsSto.run()
 
 crawler = BackgroundScheduler(daemon=True, timezone='Asia/Seoul')
-crawler.add_job(crawl, 'interval', seconds=2)
+crawler.add_job(crawl, 'interval', seconds=5)
 crawler.start()
 
 def create_app(config_class=Config):

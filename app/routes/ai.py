@@ -8,7 +8,6 @@ aiListController = AiListController()
 def aiList():
     if request.method == 'GET':
         args = request.args
-        print(args)
         aiListController.get()
     else:
         aiListController.post()

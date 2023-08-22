@@ -1,6 +1,6 @@
 from flask import request
-from app.models.news import News
 from flask_restful import Resource, reqparse, abort, fields, marshal_with
+from app.models.news import News
 from app.db_connector import db
 
 news_args = reqparse.RequestParser()
@@ -52,9 +52,11 @@ class NewsListController(Resource):
     @marshal_with(news_fields)
     def get(self):
         args = request.args
+        platform = args.get('platform')
         latest = args.get('latest', default='false').lower() == 'true'
+        # 여기서 플랫폼이 들어가야함
         if latest:
-            result = News.query.filter(News.category==self.category, News.deleted==False).order_by(News.id.desc()).first()
+            result = News.query.filter(News.category==self.category, News.platform==platform, News.deleted==False).order_by(News.id.desc()).first()
         else:
             result = News.query.filter(News.category==self.category, News.deleted==False).all()
         return result

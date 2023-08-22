@@ -1,28 +1,25 @@
 from ..NewsCrawler import NewsCrawler
 from datetime import datetime, timedelta
 import re
-
-class NaverNewsCrawler(NewsCrawler):
+#newsColl > div:nth-child(1) > div.cont_divider > ul > li:nth-child(1) > div.wrap_cont > a
+class DaumNewsCrawler(NewsCrawler):
     def __init__(self, category):
-        super(NaverNewsCrawler, self).__init__(category)
-        self.base_url = 'https://search.naver.com/search.naver?where=news&ie=utf8&sm=nws_hty&query='
-        self.platform = '네이버뉴스'
+        super(DaumNewsCrawler, self).__init__(category)
+        self.base_url = 'https://search.daum.net/search?w=news&nil_search=btn&DA=NTB&enc=utf8&cluster=y&cluster_page=1&q='
+        self.platform = '다음뉴스'
         self.target_csstag_map = {
-            'press': 'a.info:first-child',
-            'datetime': 'div.info_group > span.info',
-            'title': 'a.news_tit',
-            'url': 'a.news_tit',
+            'press': '#newsColl > div:nth-child(1) > div.cont_divider > ul > li:nth-child(1) > div.wrap_cont > span > a:nth-child(1)',
+            'datetime': '#newsColl > div:nth-child(1) > div.cont_divider > ul > li:nth-child(1) > div.wrap_cont > span > span',
+            'title': '#newsColl > div:nth-child(1) > div.cont_divider > ul > li:nth-child(1) > div.wrap_cont > a',
+            'url': '#newsColl > div:nth-child(1) > div.cont_divider > ul > li:nth-child(1) > div.wrap_cont > a',
         }
-        self.target_content_map['platform'] = '네이버뉴스'
+        self.target_content_map['platform'] = '다음뉴스'
 
     def unwrap_htmltag(self, target, htmltag):
         unwrapped = ''
         if target == 'url':
             # 이게 이상한건아
             unwrapped = htmltag['href']
-        elif target == 'press':
-            unwrapped = htmltag.text
-            unwrapped = unwrapped[:-6] if '언론사 선정' in unwrapped else unwrapped       
         elif target == 'datetime':
             unwrapped = htmltag.text
             number_pattern = "\d+"
@@ -40,7 +37,8 @@ class NaverNewsCrawler(NewsCrawler):
         else:
             unwrapped = htmltag.text
         return unwrapped
-    
 
-naverNewsAi = NaverNewsCrawler('ai')
-naverNewsSto = NaverNewsCrawler('sto')
+
+# 마지막인가.... 
+daumNewsAi = DaumNewsCrawler('ai')
+daumNewsSto = DaumNewsCrawler('sto')

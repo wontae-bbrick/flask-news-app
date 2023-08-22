@@ -1,41 +1,31 @@
 import requests
-import json
 from bs4 import BeautifulSoup
 from collections import defaultdict
 from datetime import datetime, timedelta
 import re
-
-# 이거 클래스로 만들자... 오버라이딩을 할 수 있잖아
-# 현재시간... 날짜
-
 class NewsCrawler:
-    base_url = 'https://search.naver.com/search.naver?where=news&ie=utf8&sm=nws_hty'
-    query = '&query='
-    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36"}
+    def __init__(self, category):
+        self.base_url = ''
+        self.headers = {"User-Agent": "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36"}
+        self.category = category
+        self.html = ''
+        self.platform = ''
+        self.target_csstag_map = {}
+        self.target_content_map = defaultdict(str)
+        self.target_content_map['category'] = category
 
     # override
-    target_csstag_map = {
-        'platform': 'a.info:first-child',
-        'press': 'a.info:last-child',
-        'datetime': 'div.info_group > span.info',
-        'title': 'a.news_tit',
-        'url': 'a.news_tit',
-    }
-
-    # override
-    def unwrap_htmltag(target, htmltag):
+    def unwrap_htmltag(self, target, htmltag):
         unwrapped = ''
         if target == 'url':
-            # 이게 이상한건아
             unwrapped = htmltag['href']
-        elif target == 'platform':
+        elif target == 'press':
             unwrapped = htmltag.text
             unwrapped = unwrapped[:-6] if '언론사 선정' in unwrapped else unwrapped       
         elif target == 'datetime':
             unwrapped = htmltag.text
             number_pattern = "\d+"
             number = int(re.findall(number_pattern, unwrapped)[0])
-            # 숫자만 가져오는 방법...? 정규표현식
             d = None
             if unwrapped[-3] == '간':
                 d = datetime.today() - timedelta(hours=number)
@@ -49,28 +39,23 @@ class NewsCrawler:
             unwrapped = htmltag.text
         return unwrapped
 
-    def get_target_content(html): 
-        target_content_map = defaultdict(str)
-        for target, csstag in target_csstag_map.items():
+    def get_data(self, html): 
+        for target, csstag in self.target_csstag_map.items():
             selected = html.select_one(csstag)
-            unwrapped = unwrap_htmltag(target, selected)
-            target_content_map[target] = unwrapped
+            unwrapped = self.unwrap_htmltag(target, selected)
+            self.target_content_map[target] = unwrapped.strip()
 
-        return target_content_map    
 
-    def get_html(keyword):
-        url = base_url + query + keyword
-        res = requests.get(url, headers=headers)
+    def get_html(self, keyword):
+        url = self.base_url + keyword
+        res = requests.get(url, headers=self.headers)
         raw = res.text
-        html = BeautifulSoup(raw,'html.parser')
-        return html
+        self.html = BeautifulSoup(raw,'html.parser')
 
-    # 이걸이제 밖으로 어떻게 빼냐는거야
-
-    def isLatestTheSame(self):
-        res = requests.get(f'http://127.0.0.1:5000/{category}', params={'latest': True})
+    def isLatestTheSame(self, compared):
+        res = requests.get(f'http://127.0.0.1:5000/{self.category}', params={'latest': True, 'platform': self.platform})
         data = res.json()
-        if data['title'] == self.target_content_map['title']:
+        if data[compared] == self.target_content_map[compared]:
             return True
         else:
             return False
@@ -78,9 +63,8 @@ class NewsCrawler:
     def insertToDB(self):
         requests.post(f'http://127.0.0.1:5000/{self.category}', json=self.target_content_map)
 
-    def run(category):
-        # 동시에 thread로 어떻게 돌릴래?
-        html = get_html(category)
-        target_content_map = get_target_content(html)
-        target_content_map['category'] = category
-        pass
+    def run(self):
+        self.get_html(self.category)
+        self.get_data(self.html)
+        if not self.isLatestTheSame(compared='title'):
+            self.insertToDB()
