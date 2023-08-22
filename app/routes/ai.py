@@ -7,6 +7,8 @@ aiListController = AiListController()
 @bp.route('/ai', methods=['GET, POST'])
 def aiList():
     if request.method == 'GET':
+        args = request.args
+        print(args)
         aiListController.get()
     else:
         aiListController.post()

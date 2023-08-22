@@ -4,7 +4,10 @@ from bs4 import BeautifulSoup
 from collections import defaultdict
 from datetime import datetime, timedelta
 import re
+
+# 이거 클래스로 만들자... 오버라이딩을 할 수 있잖아
 # 현재시간... 날짜
+
 
 base_url = 'https://search.naver.com/search.naver?where=news&ie=utf8&sm=nws_hty'
 query = '&query='
@@ -72,9 +75,10 @@ def run(category):
     html = get_html(category)
     target_content_map = get_target_content(html)
     target_content_map['category'] = category
-    # get을 한번 해야되지 않을까...?
-    post_request = requests.post(f'http://127.0.0.1:5000/{category}', json=target_content_map)
-    # print(post_request.status_code, post_request.text)
 
-# if __name__ == '__main__':
-#     run(category='ai')
+    res = requests.get(f'http://127.0.0.1:5000/{category}', params={'latest': True})
+    data = res.json()
+    if data['title'] == target_content_map['title']:
+        return
+
+    requests.post(f'http://127.0.0.1:5000/{category}', json=target_content_map)

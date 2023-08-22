@@ -13,7 +13,7 @@ def crawl():
     naver_run('sto')
 
 crawler = BackgroundScheduler(daemon=True, timezone='Asia/Seoul')
-crawler.add_job(crawl, 'interval', seconds=5)
+crawler.add_job(crawl, 'interval', seconds=2)
 crawler.start()
 
 def create_app(config_class=Config):
