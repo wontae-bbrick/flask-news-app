@@ -18,7 +18,6 @@ class NaverNewsCrawler(NewsCrawler):
     def unwrap_htmltag(self, target, htmltag):
         unwrapped = ''
         if target == 'url':
-            # 이게 이상한건아
             unwrapped = htmltag['href']
         elif target == 'press':
             unwrapped = htmltag.text
@@ -27,7 +26,6 @@ class NaverNewsCrawler(NewsCrawler):
             unwrapped = htmltag.text
             number_pattern = "\d+"
             number = int(re.findall(number_pattern, unwrapped)[0])
-            # 숫자만 가져오는 방법...? 정규표현식
             d = None
             if unwrapped[-3] == '간':
                 d = datetime.today() - timedelta(hours=number)

@@ -7,15 +7,19 @@ from app.controllers.news.ai import AiController, AiListController
 from app.controllers.news.sto import StoController, StoListController
 from config import Config
 
+# 이것도 다 하나로 모아볼까
 from app.crawlers.naver import *
 from app.crawlers.daum import *
+from app.crawlers.google import *
 
 
 def crawl():
-    naverNewsAi.run()
-    naverNewsSto.run()
-    daumNewsAi.run()
-    daumNewsSto.run()
+    # naverNewsAi.run()
+    # naverNewsSto.run()
+    # daumNewsAi.run()
+    # daumNewsSto.run()
+    googleNewsAi.run()
+    googleNewsSto.run()
 
 crawler = BackgroundScheduler(daemon=True, timezone='Asia/Seoul')
 crawler.add_job(crawl, 'interval', seconds=5)
@@ -25,19 +29,13 @@ def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
 
-    # Initiate database
     db.init_app(app)
 
-    # Register APIs
     api = Api(app)
     api.add_resource(AiListController, '/ai')
     api.add_resource(AiController, '/ai/<id>')
     api.add_resource(StoListController, '/sto')
     api.add_resource(StoController, '/sto/<id>')
-    # Register blueprints here
-    # 각각 ai, sto, 해서 url_prefix를 주면 되겠
-    # 습니다
-    # bp = Blueprint('main', __name__, url_prefix='/')
     app.register_blueprint(bp)
 
     return app
