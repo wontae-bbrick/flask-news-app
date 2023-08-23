@@ -3,8 +3,8 @@ from datetime import datetime, timedelta
 import re
 
 class NaverNewsCrawler(NewsCrawler):
-    def __init__(self, category):
-        super(NaverNewsCrawler, self).__init__(category)
+    def __init__(self, keyword):
+        super(NaverNewsCrawler, self).__init__(keyword)
         self.base_url = 'https://search.naver.com/search.naver?where=news&ie=utf8&sm=nws_hty&query='
         self.platform = '네이버뉴스'
         self.target_csstag_map = {

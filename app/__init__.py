@@ -14,10 +14,10 @@ from app.crawlers.google import *
 
 
 def crawl():
-    # naverNewsAi.run()
-    # naverNewsSto.run()
-    # daumNewsAi.run()
-    # daumNewsSto.run()
+    naverNewsAi.run()
+    naverNewsSto.run()
+    daumNewsAi.run()
+    daumNewsSto.run()
     googleNewsAi.run()
     googleNewsSto.run()
 

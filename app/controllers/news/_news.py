@@ -6,9 +6,9 @@ from app.db_connector import db
 news_args = reqparse.RequestParser()
 # news_args.add_argument('latest', type=bool, location='args', required=False)
 
-news_args.add_argument('category',
+news_args.add_argument('keyword',
                             type=str,
-                            help="Error: category is required.",
+                            help="Error: keyword is required.",
                             required=True)
 news_args.add_argument('title',
                             type=str,
@@ -21,6 +21,7 @@ news_args.add_argument('platform',
 news_args.add_argument('press',
                             type=str,
                             help="Error: press is required.",
+
                             required=True)
 news_args.add_argument('datetime',
                             type=str,
@@ -38,7 +39,7 @@ news_fields = {
     # 'latest': fields.Boolean,
     'id': fields.Integer,
     'title': fields.String,
-    'category': fields.String,
+    'keyword': fields.String,
     'platform': fields.String,
     'press': fields.String,
     'datetime': fields.String,
@@ -47,25 +48,24 @@ news_fields = {
 }
 
 class NewsListController(Resource):
-    category = ''
+    keyword = ''
     
     @marshal_with(news_fields)
     def get(self):
         args = request.args
         platform = args.get('platform')
         latest = args.get('latest', default='false').lower() == 'true'
-        # 여기서 플랫폼이 들어가야함
         if latest:
-            result = News.query.filter(News.category==self.category, News.platform==platform, News.deleted==False).order_by(News.id.desc()).first()
+            result = News.query.filter(News.keyword==self.keyword, News.platform==platform, News.deleted==False).order_by(News.id.desc()).first()
         else:
-            result = News.query.filter(News.category==self.category, News.deleted==False).all()
+            result = News.query.filter(News.keyword==self.keyword, News.deleted==False).all()
         return result
 
     @marshal_with(news_fields)
     def post(self):
         args = news_args.parse_args() 
         news = News(
-            category=self.category,
+            keyword=self.keyword,
             title=args['title'],
             platform=args['platform'],
             press=args['press'],
@@ -77,23 +77,23 @@ class NewsListController(Resource):
         return news
 
 class NewsController(Resource):
-    category = ''
+    keyword = ''
     @marshal_with(news_fields)
     def get(self, id):
-        result = News.query.filter(News.category==self.category, News.id==id).first()
+        result = News.query.filter(News.keyword==self.keyword, News.id==id).first()
         if not result:
-            abort(404, message=f"{self.category} with id: {id} does not exist.")
+            abort(404, message=f"{self.keyword} with id: {id} does not exist.")
         if result.deleted:
-            abort(404, message=f"{self.category} with id: {id} is already deleted.")
+            abort(404, message=f"{self.keyword} with id: {id} is already deleted.")
         return result
 
     @marshal_with(news_fields)
     def delete(self, id):
-        existing_news = News.query.filter(News.category==self.category, News.id==id).first()
+        existing_news = News.query.filter(News.keyword==self.keyword, News.id==id).first()
         if not existing_news:
-            abort(404, message=f"{self.category} with id: {id} does not exist.")
+            abort(404, message=f"{self.keyword} with id: {id} does not exist.")
         elif existing_news.deleted == True:
-            abort(404, message=f"{self.category} with id: {id} has been already deleted.")
+            abort(404, message=f"{self.keyword} with id: {id} has been already deleted.")
         else:
             existing_news.deleted = True
             db.session.commit()

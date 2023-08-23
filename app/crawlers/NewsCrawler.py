@@ -4,15 +4,15 @@ from collections import defaultdict
 from datetime import datetime, timedelta
 import re
 class NewsCrawler:
-    def __init__(self, category):
+    def __init__(self, keyword):
         self.base_url = ''
         self.headers = {"User-Agent": "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36"}
-        self.category = category
+        self.keyword = keyword
         self.html = ''
         self.platform = ''
         self.target_csstag_map = {}
         self.target_content_map = defaultdict(str)
-        self.target_content_map['category'] = category
+        self.target_content_map['keyword'] = keyword
 
     # override
     def unwrap_htmltag(self, target, htmltag):
@@ -53,7 +53,7 @@ class NewsCrawler:
         self.html = BeautifulSoup(raw,'html.parser')
 
     def isLatestTheSame(self, compared):
-        res = requests.get(f'http://127.0.0.1:5000/{self.category}', params={'latest': True, 'platform': self.platform})
+        res = requests.get(f'http://127.0.0.1:5000/{self.keyword}', params={'latest': True, 'platform': self.platform})
         data = res.json()
         if data[compared] == self.target_content_map[compared]:
             return True
@@ -61,10 +61,10 @@ class NewsCrawler:
             return False
 
     def insertToDB(self):
-        requests.post(f'http://127.0.0.1:5000/{self.category}', json=self.target_content_map)
+        requests.post(f'http://127.0.0.1:5000/{self.keyword}', json=self.target_content_map)
 
     def run(self):
-        self.get_html(self.category)
+        self.get_html(self.keyword)
         self.get_data(self.html)
         if not self.isLatestTheSame(compared='title'):
             self.insertToDB()

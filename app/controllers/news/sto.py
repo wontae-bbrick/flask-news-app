@@ -1,7 +1,7 @@
 from ._news import NewsController, NewsListController
 
 class StoController(NewsController):
-    category = 'sto'
+    keyword = 'sto'
 
 class StoListController(NewsListController):
-    category = 'sto'
+    keyword = 'sto'

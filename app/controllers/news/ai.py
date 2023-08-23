@@ -1,7 +1,8 @@
 from ._news import NewsController, NewsListController
 
+# 얘들이 자체적으로 되어야하는거 아냐?
 class AiController(NewsController):
-    category = 'ai'
+    keyword = 'ai'
 
 class AiListController(NewsListController):
-    category = 'ai'
+    keyword = 'ai'

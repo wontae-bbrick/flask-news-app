@@ -3,8 +3,8 @@ from datetime import datetime, timedelta
 import re
 
 class GoogleNewsCrawler(NewsCrawler):
-    def __init__(self, category):
-        super(GoogleNewsCrawler, self).__init__(category)
+    def __init__(self, keyword):
+        super(GoogleNewsCrawler, self).__init__(keyword)
         self.base_url = 'https://news.google.com/search?hl=ko&gl=KR&ceid=KR%3Ako&q='
         self.platform = '구글뉴스'
         self.target_csstag_map = {

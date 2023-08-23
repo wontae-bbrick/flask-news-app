@@ -2,8 +2,8 @@ from ..NewsCrawler import NewsCrawler
 from datetime import datetime, timedelta
 import re
 class DaumNewsCrawler(NewsCrawler):
-    def __init__(self, category):
-        super(DaumNewsCrawler, self).__init__(category)
+    def __init__(self, keyword):
+        super(DaumNewsCrawler, self).__init__(keyword)
         self.base_url = 'https://search.daum.net/search?w=news&nil_search=btn&DA=NTB&enc=utf8&cluster=y&cluster_page=1&q='
         self.platform = '다음뉴스'
         self.target_csstag_map = {
