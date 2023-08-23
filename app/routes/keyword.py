@@ -1,7 +1,8 @@
 from flask import request
 from app.routes import bp
-from app.controllers.keyword import KeywordListController
+from app.controllers.keyword import KeywordListController, KeywordController
 
+keywordController = KeywordController()
 keywordListController = KeywordListController()
 @bp.route('/keyword', methods=['GET, POST'])
 def keywordList():
@@ -10,9 +11,9 @@ def keywordList():
     else:
         keywordListController.post()
 
-# @bp.route('/ai/<string:id>', methods=['GET, DELETE'])
-# def ai(id):
-#     if request.method == 'GET':
-#         aiController.get(id)
-#     else:
-#         aiController.delete(id)
+@bp.route('/keyword/<string:id>', methods=['GET, DELETE'])
+def keyword(id):
+    if request.method == 'GET':
+        keywordListController.get(id)
+    else:
+        keywordListController.delete(id)

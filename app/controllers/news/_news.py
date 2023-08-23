@@ -48,8 +48,9 @@ news_fields = {
 }
 
 class NewsListController(Resource):
-    keyword = ''
-    
+    def __init__(self, keyword):
+        self.keyword = keyword
+
     @marshal_with(news_fields)
     def get(self):
         args = request.args
@@ -77,7 +78,9 @@ class NewsListController(Resource):
         return news
 
 class NewsController(Resource):
-    keyword = ''
+    def __init__(self, keyword):
+        self.keyword = keyword
+        
     @marshal_with(news_fields)
     def get(self, id):
         result = News.query.filter(News.keyword==self.keyword, News.id==id).first()

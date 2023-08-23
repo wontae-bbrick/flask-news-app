@@ -3,8 +3,9 @@ from flask_restful import Api
 from apscheduler.schedulers.background import BackgroundScheduler
 from app.routes import bp
 from app.db_connector import db
-from app.controllers.news.ai import AiController, AiListController
-from app.controllers.news.sto import StoController, StoListController
+# from app.controllers.news.ai import AiController, AiListController
+# from app.controllers.news.sto import StoController, StoListController
+from app.controllers.news._news import NewsController, NewsListController
 from config import Config
 
 # 이것도 다 하나로 모아볼까
@@ -31,11 +32,13 @@ def create_app(config_class=Config):
 
     db.init_app(app)
 
+    # 리소스를 어떻게 더해야할지...
     api = Api(app)
-    api.add_resource(AiListController, '/ai')
-    api.add_resource(AiController, '/ai/<id>')
-    api.add_resource(StoListController, '/sto')
-    api.add_resource(StoController, '/sto/<id>')
+    # 이것 때문인데...
+    api.add_resource(NewsListController('ai'), '/ai')
+    api.add_resource(NewsController('ai'), '/ai/<id>')
+    api.add_resource(NewsListController('sto'), '/sto')
+    api.add_resource(NewsController('sto'), '/sto/<id>')
     app.register_blueprint(bp)
 
     return app

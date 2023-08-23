@@ -53,7 +53,7 @@ class NewsCrawler:
         self.html = BeautifulSoup(raw,'html.parser')
 
     def isLatestTheSame(self, compared):
-        res = requests.get(f'http://127.0.0.1:5000/{self.keyword}', params={'latest': True, 'platform': self.platform})
+        res = requests.get(f'http://127.0.0.1:5000/news/{self.keyword}', params={'latest': True, 'platform': self.platform})
         data = res.json()
         if data[compared] == self.target_content_map[compared]:
             return True
@@ -61,7 +61,7 @@ class NewsCrawler:
             return False
 
     def insertToDB(self):
-        requests.post(f'http://127.0.0.1:5000/{self.keyword}', json=self.target_content_map)
+        requests.post(f'http://127.0.0.1:5000/news/{self.keyword}', json=self.target_content_map)
 
     def run(self):
         self.get_html(self.keyword)
