@@ -14,14 +14,11 @@ from app.crawlers.naver import *
 from app.crawlers.daum import *
 from app.crawlers.google import *
 
-
+import requests
 
 
 
 def crawl():
-    
-
-
     # naverNewsAi.run()
     # naverNewsSto.run()
     # daumNewsAi.run()
@@ -30,13 +27,14 @@ def crawl():
     # googleNewsSto.run()
     pass
 
+# 가져오는건 한번만 하면 되나
 crawler = BackgroundScheduler(daemon=True, timezone='Asia/Seoul')
 crawler.add_job(crawl, 'interval', seconds=5)
-# crawler.start()
+crawler.start()
 
 def get_keywords():
-
-    pass
+    keywords = requests.get(f'http://127.0.0.1:5000/keyword')
+    return keywords
 
 
 def create_app(config_class=Config):
@@ -44,8 +42,8 @@ def create_app(config_class=Config):
     app.config.from_object(config_class)
 
     db.init_app(app)
-
     api = Api(app)
+
     api.add_resource(NewsListController, '/news/<keyword>')
     api.add_resource(NewsController, '/news/<keyword>/<id>')
     api.add_resource(KeywordListController, '/keyword')

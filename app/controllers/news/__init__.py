@@ -46,25 +46,26 @@ news_fields = {
 }
 
 class NewsListController(Resource):
-    def __init__(self, keyword):
-        self.keyword = keyword
+    # keyword = ''
+    # def __init__(self, keyword):
+    #     self.keyword = keyword
 
     @marshal_with(news_fields)
-    def get(self):
+    def get(self, keyword):
         args = request.args
         platform = args.get('platform')
         latest = args.get('latest', default='false').lower() == 'true'
         if latest:
-            result = News.query.filter(News.keyword==self.keyword, News.platform==platform, News.deleted==False).order_by(News.id.desc()).first()
+            result = News.query.filter(News.keyword==keyword, News.platform==platform, News.deleted==False).order_by(News.id.desc()).first()
         else:
-            result = News.query.filter(News.keyword==self.keyword, News.deleted==False).all()
+            result = News.query.filter(News.keyword==keyword, News.deleted==False).all()
         return result
 
     @marshal_with(news_fields)
-    def post(self):
+    def post(self, keyword):
         args = news_args.parse_args() 
         news = News(
-            keyword=self.keyword,
+            keyword=keyword,
             title=args['title'],
             platform=args['platform'],
             press=args['press'],
@@ -76,25 +77,26 @@ class NewsListController(Resource):
         return news
 
 class NewsController(Resource):
-    def __init__(self, keyword):
-        self.keyword = keyword
+    # keyword = ''
+    # def __init__(self, keyword):
+    #     self.keyword = keyword
         
     @marshal_with(news_fields)
-    def get(self, id):
-        result = News.query.filter(News.keyword==self.keyword, News.id==id).first()
+    def get(self, keyword, id):
+        result = News.query.filter(News.keyword==keyword, News.id==id).first()
         if not result:
-            abort(404, message=f"{self.keyword} with id: {id} does not exist.")
+            abort(404, message=f"{keyword} with id: {id} does not exist.")
         if result.deleted:
-            abort(404, message=f"{self.keyword} with id: {id} is already deleted.")
+            abort(404, message=f"{keyword} with id: {id} is already deleted.")
         return result
 
     @marshal_with(news_fields)
-    def delete(self, id):
-        existing_news = News.query.filter(News.keyword==self.keyword, News.id==id).first()
+    def delete(self, keyword, id):
+        existing_news = News.query.filter(News.keyword==keyword, News.id==id).first()
         if not existing_news:
-            abort(404, message=f"{self.keyword} with id: {id} does not exist.")
+            abort(404, message=f"{keyword} with id: {id} does not exist.")
         elif existing_news.deleted == True:
-            abort(404, message=f"{self.keyword} with id: {id} has been already deleted.")
+            abort(404, message=f"{keyword} with id: {id} has been already deleted.")
         else:
             existing_news.deleted = True
             db.session.commit()
