@@ -1,6 +1,6 @@
 from flask import request
 from app.routes import bp
-from app.controllers.news._news import NewsController, NewsListController
+from app.controllers.news import NewsController, NewsListController
 
 @bp.route('/news/<string:keyword>', methods=['GET, POST'])
 def newsList(keyword):

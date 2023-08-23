@@ -4,7 +4,6 @@ from app.models.news import News
 from app.db_connector import db
 
 news_args = reqparse.RequestParser()
-# news_args.add_argument('latest', type=bool, location='args', required=False)
 
 news_args.add_argument('keyword',
                             type=str,
@@ -36,7 +35,6 @@ news_args.add_argument('deleted',
                             required=False)
 
 news_fields = {
-    # 'latest': fields.Boolean,
     'id': fields.Integer,
     'title': fields.String,
     'keyword': fields.String,

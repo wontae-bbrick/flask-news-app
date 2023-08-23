@@ -39,6 +39,7 @@ class NaverNewsCrawler(NewsCrawler):
             unwrapped = htmltag.text
         return unwrapped
     
-
+# 이걸 또....?
+# 한번에 객체를 여러개 어떻게 만들죠?
 naverNewsAi = NaverNewsCrawler('ai')
 naverNewsSto = NaverNewsCrawler('sto')

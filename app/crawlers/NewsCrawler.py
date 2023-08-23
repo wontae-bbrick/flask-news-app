@@ -55,10 +55,7 @@ class NewsCrawler:
     def isLatestTheSame(self, compared):
         res = requests.get(f'http://127.0.0.1:5000/news/{self.keyword}', params={'latest': True, 'platform': self.platform})
         data = res.json()
-        if data[compared] == self.target_content_map[compared]:
-            return True
-        else:
-            return False
+        return data[compared] == self.target_content_map[compared]
 
     def insertToDB(self):
         requests.post(f'http://127.0.0.1:5000/news/{self.keyword}', json=self.target_content_map)

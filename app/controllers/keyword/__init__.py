@@ -7,7 +7,7 @@ keyword_args = reqparse.RequestParser()
 
 keyword_args.add_argument('name',
                             type=str,
-                            help="Error: keyword is required.",
+                            help="Error: keyword name is required.",
                             required=True)
 keyword_args.add_argument('deleted',
                             type=bool,
@@ -25,7 +25,7 @@ class KeywordListController(Resource):
         args = request.args
         search = args.get('search')
         if search:
-            result = Keyword.query.filter(search in Keyword.name, Keyword.deleted==False).all()
+            result = Keyword.query.filter(Keyword.name.contains(search), Keyword.deleted==False).all()
         else:
             result = Keyword.query.filter(Keyword.deleted==False).all()
         return result
@@ -33,12 +33,12 @@ class KeywordListController(Resource):
     @marshal_with(keyword_fields)
     def post(self):
         args = keyword_args.parse_args() 
-        Keyword = Keyword(
+        keyword = Keyword(
             name=args['name'],
         )
-        db.session.add(Keyword)
+        db.session.add(keyword)
         db.session.commit()
-        return Keyword
+        return keyword
 
 class KeywordController(Resource):
     @marshal_with(keyword_fields)
