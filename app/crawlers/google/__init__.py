@@ -19,13 +19,10 @@ class GoogleNewsCrawler(NewsCrawler):
         unwrapped = ''
         if target == 'url':
             unwrapped = htmltag['href']
+            unwrapped = 'https://news.google.com/'+unwrapped[1:]
         elif target == 'press':
             unwrapped = htmltag.text
             unwrapped = unwrapped[:-6] if '언론사 선정' in unwrapped else unwrapped       
-        elif target == 'url':
-            unwrapped = htmltag.text
-            # 왜 이거 안 먹죠?
-            unwrapped = 'https://news.google.com/'+unwrapped[1:]
         elif target == 'datetime':
             unwrapped = htmltag.text
             number_pattern = "\d+"
