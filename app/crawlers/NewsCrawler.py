@@ -60,6 +60,11 @@ class NewsCrawler:
     def insertToDB(self):
         requests.post(f'http://127.0.0.1:5000/news/{self.keyword}', json=self.target_content_map)
 
+    # def get_keywords(self):
+    #     res = requests.get(f'http://127.0.0.1:5000/keyword')
+    #     data = res.json()
+    #     return data
+
     def run(self):
         self.get_html(self.keyword)
         self.get_data(self.html)

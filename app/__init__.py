@@ -14,9 +14,13 @@ from app.crawlers.naver import *
 from app.crawlers.daum import *
 from app.crawlers.google import *
 
+import datetime
 import requests
 
-
+def get_keywords():
+        res = requests.get(f'http://127.0.0.1:5000/keyword')
+        data = res.json()
+        return data
 
 def crawl():
     # naverNewsAi.run()
@@ -27,8 +31,10 @@ def crawl():
     # googleNewsSto.run()
     pass
 
-# 가져오는건 한번만 하면 되나
+# 가져오는건 한번만 하면 되나? 어떻게 하면 좋을까?
 crawler = BackgroundScheduler(daemon=True, timezone='Asia/Seoul')
+# 이거 한번만?
+crawler.add_job(get_keywords, 'date', run_date=datetime.datetime.now() + datetime.timedelta(seconds=10))
 crawler.add_job(crawl, 'interval', seconds=5)
 crawler.start()
 
