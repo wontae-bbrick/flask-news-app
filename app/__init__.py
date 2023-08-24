@@ -15,7 +15,7 @@ crawlerService = CrawlerService()
 
 scheduler = BackgroundScheduler(daemon=True, timezone='Asia/Seoul')
 scheduler.add_job(crawlerService.readyAllCrawlers, 'date', run_date=datetime.datetime.now() + datetime.timedelta(seconds=1))
-scheduler.add_job(crawlerService.runAllCrawlers, 'date', run_date=datetime.datetime.now() + datetime.timedelta(seconds=5))
+scheduler.add_job(crawlerService.runAllCrawlers, 'interval', seconds=60)
 scheduler.start()
 
 def create_app(config_class=Config):
