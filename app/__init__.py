@@ -21,6 +21,8 @@ import requests
 crawlers = []
 
 # 추가될때마다
+# 이걸 코드를 따로 하고 싶거든요?
+# 삭제될 때
 # 중복체크
 # 런타임에서 만들 수 있게
 def get_keywords():

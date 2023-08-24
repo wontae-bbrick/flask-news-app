@@ -20,6 +20,8 @@ class DaumNewsCrawler(NewsCrawler):
             unwrapped = htmltag['href']
         elif target == 'datetime':
             unwrapped = htmltag.text
+            # 한글이 있고 없고를 봐야 합니다.
+            # 결국은 datetime으로 저장하는게 맞을 듯. 일자까지만 해서요
             number_pattern = "\d+"
             number = int(re.findall(number_pattern, unwrapped)[0])
             d = None
