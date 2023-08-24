@@ -1,13 +1,18 @@
 from flask import request
-from flask_restful import Resource, reqparse, abort, fields, marshal_with
+from flask_restful import Resource, reqparse, abort, fields, marshal_with, inputs
 from app.models.keyword import Keyword
 from app.db_connector import db
 
+
 keyword_args = reqparse.RequestParser()
 
+keyword_args.add_argument('keyword',
+                            type=inputs.regex(r'^[a-zA-Z]+$'),
+                            help="Error: keyword is required.",
+                            required=True)
 keyword_args.add_argument('name',
                             type=str,
-                            help="Error: keyword name is required.",
+                            help="Error: name is required.",
                             required=True)
 keyword_args.add_argument('deleted',
                             type=bool,
@@ -15,6 +20,7 @@ keyword_args.add_argument('deleted',
 
 keyword_fields = {
     'id': fields.Integer,
+    'keyword': fields.String,
     'name': fields.String,
     'deleted': fields.Boolean
 }
@@ -34,6 +40,7 @@ class KeywordListController(Resource):
     def post(self):
         args = keyword_args.parse_args() 
         keyword = Keyword(
+            keyword=args['keyword'],
             name=args['name'],
         )
         db.session.add(keyword)

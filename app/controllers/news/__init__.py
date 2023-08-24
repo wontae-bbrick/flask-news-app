@@ -1,12 +1,13 @@
 from flask import request
-from flask_restful import Resource, reqparse, abort, fields, marshal_with
+from flask_restful import Resource, reqparse, abort, fields, marshal_with, inputs
 from app.models.news import News
 from app.db_connector import db
+from ..validator import EnglishWordValidator
 
 news_args = reqparse.RequestParser()
 
 news_args.add_argument('keyword',
-                            type=str,
+                            type=inputs.regex(r'^[a-zA-Z]+$'),
                             help="Error: keyword is required.",
                             required=True)
 news_args.add_argument('title',
