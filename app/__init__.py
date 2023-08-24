@@ -3,8 +3,9 @@ from flask_restful import Api
 from apscheduler.schedulers.background import BackgroundScheduler
 from app.routes import bp
 from app.db_connector import db
-from app.controllers.news import NewsController, NewsListController
-from app.controllers.keyword import KeywordController, KeywordListController
+# from app.controllers.news import NewsController, NewsListController
+# from app.controllers.keyword import KeywordController, KeywordListController
+from app.controllers import *
 from config import Config
 
 import datetime
