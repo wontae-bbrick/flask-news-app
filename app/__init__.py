@@ -17,12 +17,30 @@ from app.crawlers.google import *
 import datetime
 import requests
 
+# 다이나믹하게...
+crawlers = []
+class_methods = {
+    "__init__": lambda self, keyword: setattr(self, "keyword", keyword),
+}
+
 def get_keywords():
-        res = requests.get(f'http://127.0.0.1:5000/keyword')
-        data = res.json()
-        return data
+    # 런타임에서 만들 수 있게
+    # args로 중복 안되게 보낸다던가 하는거
+    res = requests.get(f'http://127.0.0.1:5000/keyword')
+    data = res.json()
+    for each in data:
+        keyword = each['keyword']
+        newsCrawler = type("DaumNewsCrawler", (object,), {**class_methods})
+        crawlers.append(newsCrawler(keyword))
+        pass
+    print(crawlers)
+
+    return data
 
 def crawl():
+    for crawler in crawlers:
+        # crawler().run()
+        pass
     # naverNewsAi.run()
     # naverNewsSto.run()
     # daumNewsAi.run()
@@ -34,7 +52,7 @@ def crawl():
 # 가져오는건 한번만 하면 되나? 어떻게 하면 좋을까?
 crawler = BackgroundScheduler(daemon=True, timezone='Asia/Seoul')
 # 이거 한번만?
-crawler.add_job(get_keywords, 'date', run_date=datetime.datetime.now() + datetime.timedelta(seconds=10))
+crawler.add_job(get_keywords, 'date', run_date=datetime.datetime.now() + datetime.timedelta(seconds=1))
 crawler.add_job(crawl, 'interval', seconds=5)
 crawler.start()
 
