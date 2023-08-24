@@ -7,13 +7,14 @@ from app.db_connector import db
 keyword_args = reqparse.RequestParser()
 
 keyword_args.add_argument('keyword',
-                            type=inputs.regex(r'^[a-zA-Z]+$'),
+                            type=str,
+                            # type=inputs.regex(r'^[a-zA-Z]+$'),
                             help="Error: keyword is required.",
                             required=True)
-keyword_args.add_argument('name',
-                            type=str,
-                            help="Error: name is required.",
-                            required=True)
+# keyword_args.add_argument('search',
+#                             type=str,
+#                             help="Error: search is required.",
+#                             required=True)
 keyword_args.add_argument('deleted',
                             type=bool,
                             required=False)
@@ -21,7 +22,7 @@ keyword_args.add_argument('deleted',
 keyword_fields = {
     'id': fields.Integer,
     'keyword': fields.String,
-    'name': fields.String,
+    # 'search': fields.String,
     'deleted': fields.Boolean
 }
 
@@ -31,7 +32,7 @@ class KeywordListController(Resource):
         args = request.args
         search = args.get('search')
         if search:
-            result = Keyword.query.filter(Keyword.name.contains(search), Keyword.deleted==False).all()
+            result = Keyword.query.filter(Keyword.search.contains(search), Keyword.deleted==False).all()
         else:
             result = Keyword.query.filter(Keyword.deleted==False).all()
         return result
@@ -39,9 +40,12 @@ class KeywordListController(Resource):
     @marshal_with(keyword_fields)
     def post(self):
         args = keyword_args.parse_args() 
+        existing_search = Keyword.query.filter(Keyword.keyword==args['keyword']).first()
+        if existing_search:
+            abort(409, message=f"Keyword with {args['keyword']} already exist")
         keyword = Keyword(
             keyword=args['keyword'],
-            name=args['name'],
+            # search=args['search'],
         )
         db.session.add(keyword)
         db.session.commit()
