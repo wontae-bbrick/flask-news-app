@@ -68,5 +68,5 @@ class NewsCrawler:
     def run(self):
         self.get_html(self.keyword)
         self.get_data(self.html)
-        if not self.isLatestTheSame(compared='title'):
+        if not self.isLatestTheSame(compared='url'):
             self.insertToDB()
