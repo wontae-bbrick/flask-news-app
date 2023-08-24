@@ -43,6 +43,3 @@ class GoogleNewsCrawler(NewsCrawler):
             unwrapped = htmltag.text
         return unwrapped
     
-
-googleNewsAi = GoogleNewsCrawler('ai')
-googleNewsSto = GoogleNewsCrawler('sto')

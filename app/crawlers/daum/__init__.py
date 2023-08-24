@@ -35,6 +35,3 @@ class DaumNewsCrawler(NewsCrawler):
         else:
             unwrapped = htmltag.text
         return unwrapped
-
-daumNewsAi = DaumNewsCrawler('ai')
-daumNewsSto = DaumNewsCrawler('sto')

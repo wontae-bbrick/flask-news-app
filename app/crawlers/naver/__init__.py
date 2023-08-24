@@ -39,6 +39,3 @@ class NaverNewsCrawler(NewsCrawler):
             unwrapped = htmltag.text
         return unwrapped
     
-# 얘만
-naverNewsAi = NaverNewsCrawler('ai')
-naverNewsSto = NaverNewsCrawler('sto')
