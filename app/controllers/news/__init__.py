@@ -6,7 +6,7 @@ from app.db_connector import db
 news_args = reqparse.RequestParser()
 
 news_args.add_argument('keyword',
-                            type=inputs.regex(r'^[a-zA-Z]+$'),
+                            type=str,
                             help="Error: keyword is required.",
                             required=True)
 news_args.add_argument('title',
