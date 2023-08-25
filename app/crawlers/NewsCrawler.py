@@ -30,11 +30,7 @@ class NewsCrawler:
         for target, csstag in self.target_csstag_map.items():
             selected = html.select_one(csstag)
             unwrapped = self.unwrap_htmltag(target, selected)
-            if type(unwrapped) == 'str':
-                unwrapped = unwrapped.strip()
-            # if target == 'datetime':
-            #     unwrapped = self.to_datetime(unwrapped)
-            self.target_content_map[target] = unwrapped
+            self.target_content_map[target] = unwrapped.strip()
 
     def get_html(self, keyword):
         url = self.base_url + keyword

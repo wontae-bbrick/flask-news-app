@@ -6,7 +6,7 @@ class GoogleNewsCrawler(NewsCrawler):
     def __init__(self, keyword):
         super(GoogleNewsCrawler, self).__init__(keyword)
         self.base_url = 'https://news.google.com/search?hl=ko&gl=KR&ceid=KR%3Ako&q='
-        self.platform = '구글뉴스'
+        self.platform = '구글'
         # 이 매핑이 지금 잘못되었음
         # article.MQsxIb
         self.target_csstag_map = {
@@ -15,7 +15,7 @@ class GoogleNewsCrawler(NewsCrawler):
             'title': 'article.MQsxIb h3 a',
             'url': 'article.MQsxIb a.VDXfz',
         }
-        self.target_content_map['platform'] = '구글뉴스'
+        self.target_content_map['platform'] = '구글'
         #yDmH0d > c-wiz:nth-child(30) > div > div.FVeGwb.CVnAc.Haq2Hf.bWfURe > div.ajwQHc.BL5WZb.RELBvb > div > main > c-wiz > div.lBwEZb.BL5WZb.GndZbb > div:nth-child(99) > div > article
     def unwrap_htmltag(self, target, htmltag):
         unwrapped = ''

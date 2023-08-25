@@ -6,14 +6,14 @@ class NaverNewsCrawler(NewsCrawler):
     def __init__(self, keyword):
         super(NaverNewsCrawler, self).__init__(keyword)
         self.base_url = 'https://search.naver.com/search.naver?where=news&ie=utf8&sm=nws_hty&query='
-        self.platform = '네이버뉴스'
+        self.platform = '네이버'
         self.target_csstag_map = {
             'press': 'a.info:first-child',
             'datetime': 'div.info_group > span.info',
             'title': 'a.news_tit',
             'url': 'a.news_tit',
         }
-        self.target_content_map['platform'] = '네이버뉴스'
+        self.target_content_map['platform'] = '네이버'
 
     def unwrap_htmltag(self, target, htmltag):
         unwrapped = ''
