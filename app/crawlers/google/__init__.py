@@ -21,7 +21,7 @@ class GoogleNewsCrawler(NewsCrawler):
         unwrapped = ''
         if target == 'url':
             unwrapped = htmltag['href']
-            unwrapped = 'https://news.google.com/'+unwrapped[1:]
+            unwrapped = 'https://news.google.com/'+unwrapped[2:]
         elif target == 'press':
             unwrapped = htmltag.text
         elif target == 'datetime':
