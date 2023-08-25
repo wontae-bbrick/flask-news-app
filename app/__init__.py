@@ -13,9 +13,10 @@ crawlerService = CrawlerService()
 
 scheduler = BackgroundScheduler(daemon=True, timezone='Asia/Seoul')
 scheduler.add_job(crawlerService.readyAllCrawlers, 'date', run_date=datetime.datetime.now() + datetime.timedelta(seconds=1))
-scheduler.add_job(crawlerService.readyAllCrawlers, 'interval', seconds=300)
-scheduler.add_job(crawlerService.runAllCrawlers, 'interval', seconds=30)
-# scheduler.start()
+scheduler.add_job(crawlerService.runAllCrawlers, 'date', run_date=datetime.datetime.now() + datetime.timedelta(seconds=4))
+scheduler.add_job(crawlerService.readyAllCrawlers, 'interval', seconds=1200)
+scheduler.add_job(crawlerService.runAllCrawlers, 'interval', seconds=600)
+scheduler.start()
 
 def create_app(config_class=Config):
     app = Flask(__name__)
