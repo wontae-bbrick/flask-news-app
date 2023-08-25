@@ -2,6 +2,7 @@ from flask import request
 from flask_restful import Resource, reqparse, abort, fields, marshal_with, inputs
 from app.models.news import News
 from app.db_connector import db
+# from app.utils.types import type_datetime
 
 news_args = reqparse.RequestParser()
 
@@ -20,11 +21,10 @@ news_args.add_argument('platform',
 news_args.add_argument('press',
                             type=str,
                             help="Error: press is required.",
-
                             required=True)
 news_args.add_argument('datetime',
                             type=str,
-                            help="Error: datetime is required.",
+                            # type=type_datetime,
                             required=True)
 news_args.add_argument('url',
                             type=str,
