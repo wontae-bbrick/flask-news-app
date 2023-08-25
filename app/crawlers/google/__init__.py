@@ -43,3 +43,5 @@ class GoogleNewsCrawler(NewsCrawler):
             unwrapped = htmltag.text
         return unwrapped
     
+
+# 구글뉴스가 안 들어가는 것 같음

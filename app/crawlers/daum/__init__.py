@@ -20,20 +20,17 @@ class DaumNewsCrawler(NewsCrawler):
             unwrapped = htmltag['href']
         elif target == 'datetime':
             unwrapped = htmltag.text
-            # 한글이 있고 없고를 봐야 합니다.
-            # 결국은 datetime으로 저장하는게 맞을 듯. 일자까지만 해서요
-            number_pattern = "\d+"
-            number = int(re.findall(number_pattern, unwrapped)[0])
-            d = None
-            if unwrapped[-2] == '간':
-                d = datetime.today() - timedelta(hours=number)
-            elif unwrapped[-2] == '분':
-                d = datetime.today() - timedelta(minutes=number)
-            else: 
-                d = datetime.today() - timedelta(days=number)
-                
-
-            unwrapped = str(d)
+            if not self.is_valid_datetime(unwrapped, format="%Y.%m.%d"):            
+                number_pattern = "\d+"
+                number = int(re.findall(number_pattern, unwrapped)[0])
+                d = None
+                if unwrapped[-2] == '간':
+                    d = datetime.today() - timedelta(hours=number)
+                elif unwrapped[-2] == '분':
+                    d = datetime.today() - timedelta(minutes=number)
+                else: 
+                    d = datetime.today() - timedelta(days=number)
+                unwrapped = str(d)
         else:
             unwrapped = htmltag.text
         return unwrapped

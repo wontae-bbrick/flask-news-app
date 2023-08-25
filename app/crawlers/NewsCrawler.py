@@ -16,28 +16,14 @@ class NewsCrawler:
 
     # override
     def unwrap_htmltag(self, target, htmltag):
-        unwrapped = ''
-        if target == 'url':
-            unwrapped = htmltag['href']
-        elif target == 'press':
-            unwrapped = htmltag.text
-            unwrapped = unwrapped[:-6] if '언론사 선정' in unwrapped else unwrapped       
-        elif target == 'datetime':
-            unwrapped = htmltag.text
-            number_pattern = "\d+"
-            number = int(re.findall(number_pattern, unwrapped)[0])
-            d = None
-            if unwrapped[-3] == '간':
-                d = datetime.today() - timedelta(hours=number)
-            elif unwrapped[-3] == '분':
-                d = datetime.today() - timedelta(minutes=number)
-            else: 
-                d = datetime.today() - timedelta(days=number)
-
-            unwrapped = str(d)
-        else:
-            unwrapped = htmltag.text
-        return unwrapped
+        pass
+    
+    def is_valid_datetime(self, string, format="%Y-%m-%d %H:%M:%S"):
+        try:
+            datetime.strptime(string, format)
+            return True
+        except ValueError:
+            return False
 
     def get_data(self, html): 
         for target, csstag in self.target_csstag_map.items():
