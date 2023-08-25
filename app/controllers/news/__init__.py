@@ -2,7 +2,6 @@ from flask import request
 from flask_restful import Resource, reqparse, abort, fields, marshal_with, inputs
 from app.models.news import News
 from app.db_connector import db
-# from app.utils.types import type_datetime
 
 news_args = reqparse.RequestParser()
 
